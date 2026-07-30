@@ -19,15 +19,15 @@ $graph:
 - class: Workflow
   id: gdaevapotranspiration-earthcode
   label: GDAEvapotranspiration_EarthCode
-  doc: The processor estimates Daily Evapotranspiration from Sentinel-2 and Sentinel-3 morning acquisition(s) based on the Two-Source Energy Balance Algorithm (TSEB) and machine learning sharpened Land Surface Temperature, utilizing Sen-ET project as baseline.
+  doc: The processor estimates Daily Evapotranspiration from Sentinel-2 and Sentinel-3 SLSTR LST morning acquisition(s) based on the Two-Source Energy Balance Algorithm (TSEB) and machine learning sharpened Land Surface Temperature, utilizing Sen-ET project as baseline.
   inputs:
     s2_input:
       label: Sentinel-2 acquisition
       doc: Sentinel-2 acquisition covering the area of interest.
       type: Directory
     s3_input:
-      label: Sentinel-3 morning acquisition(s) (5-12am)
-      doc: Sentinel-3 morning acquisition(s) (5-12am) covering the same area and having an acquisition date within +- 5 days from Sentinel-2 acquisition.
+      label: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am)
+      doc: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am) covering the same area and having an acquisition date within +- 5 days from Sentinel-2 acquisition.
       type: Directory
     path_to_credentials:
       label: Path to CDSAPI credentials stored in JSON file
@@ -80,16 +80,12 @@ $graph:
         prefix: --s2_input
       
     s3_input:
-      label: Sentinel-3 morning acquisition(s) (5-12am)
-      doc: Sentinel-3 morning acquisition(s) (5-12am) covering the same area and having an acquisition date within +- 5 days from Sentinel-2 acquisition.
-      type: 
-        type: array
-        items: Directory
-        inputBinding:
-          prefix: --s3_input
-          separate: false
+      label: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am)
+      doc: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am) covering the same area and having an acquisition date within +- 5 days from Sentinel-2 acquisition.
+      type: Directory[]
       inputBinding:
         position: 2
+        prefix: --s3_input
         
     path_to_credentials:
       label: Path to CDSAPI credentials stored in JSON file
