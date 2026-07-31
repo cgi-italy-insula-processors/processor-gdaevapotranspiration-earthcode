@@ -1,4 +1,4 @@
-FROM core.harbor.dev.eoss-cloud.it/gdap/gdap:1.0.1
+FROM core.harbor.dev.eoss-cloud.it/gdap/gdap:1.0.5
 
 RUN apt-get update && apt-get install -y jq
 
