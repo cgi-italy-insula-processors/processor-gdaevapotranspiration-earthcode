@@ -17,8 +17,8 @@ cwlVersion: v1.2
 # processor, keeping the Workflow and CommandLineTool sides in sync.
 $graph:
 - class: Workflow
-  id: gdaevapotranspiration-earthcode
-  label: GDAEvapotranspiration_EarthCode
+  id: gdaevapotranspiration-earthcode-test
+  label: GDAEvapotranspiration_EarthCode_test
   doc: The processor estimates Daily Evapotranspiration from Sentinel-2 and Sentinel-3 SLSTR LST morning acquisition(s) based on the Two-Source Energy Balance Algorithm (TSEB) and machine learning sharpened Land Surface Temperature, utilizing Sen-ET project as baseline.
   inputs:
     s2_input:
