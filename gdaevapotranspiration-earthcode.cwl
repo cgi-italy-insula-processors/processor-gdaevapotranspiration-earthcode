@@ -5,8 +5,9 @@ cwlVersion: v1.2
 # Rules enforced by the platform:
 #   - $graph must hold EXACTLY ONE Workflow and ONE CommandLineTool.
 #   - The Workflow has a single step whose `run` points at the CommandLineTool id.
-#   - DockerRequirement.dockerPull is REQUIRED. The value __IMAGE__ is replaced by
-#     the build pipeline with the published image reference; do not edit it.
+#   - DockerRequirement.dockerPull is REQUIRED and must stay the placeholder token
+#     the build pipeline injects the published image reference into; do not edit that
+#     line. Keep the token to exactly ONE occurrence (the dockerPull value below).
 #   - Input types: Directory = a STAC catalogue, File = a downloadable file,
 #     plus string / int / long / float / boolean / enum. Outputs must be
 #     File or Directory.
@@ -19,7 +20,7 @@ $graph:
 - class: Workflow
   id: gdaevapotranspiration-earthcode-test
   label: GDAEvapotranspiration_EarthCode_test
-  doc: The processor estimates Daily Evapotranspiration from Sentinel-2 and Sentinel-3 SLSTR LST morning acquisition(s) based on the Two-Source Energy Balance Algorithm (TSEB) and machine learning sharpened Land Surface Temperature, utilizing Sen-ET project as baseline.
+  doc: Estimates Daily Evapotranspiration from Sentinel-2 and Sentinel-3 SLSTR LST morning acquisition(s) based on the Two-Source Energy Balance Algorithm (TSEB) and machine learning sharpened Land Surface Temperature, utilizing Sen-ET project as baseline.
   inputs:
     s2_input:
       label: Sentinel-2 acquisition
@@ -28,27 +29,29 @@ $graph:
     s3_input:
       label: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am)
       doc: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am) covering the same area and having an acquisition date within +- 5 days from Sentinel-2 acquisition.
-      type: Directory
+      type: Directory[]
     path_to_credentials:
       label: Path to CDSAPI credentials stored in JSON file
       doc: Credentials to CDSAPI needed to download ERA5 data.
-      type: String
+      type: string
   outputs:
     output_daily_et:
-      type: Directory
+      type: Directory[]
       outputSource: process/output_daily_et
     output_lst:
-      type: Directory
+      type: Directory[]
       outputSource: process/output_lst
     output_s2_quality:
-      type: Directory
+      type: Directory[]
       outputSource: process/output_s2_quality
     output_s3_quality:
-      type: Directory
+      type: Directory[]
       outputSource: process/output_s3_quality
   steps:
     process:
       run: '#main'
+      scatter: s3_input
+      scatterMethod: dotproduct
       in:
         s2_input: s2_input
         s3_input: s3_input
@@ -82,7 +85,7 @@ $graph:
     s3_input:
       label: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am)
       doc: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am) covering the same area and having an acquisition date within +- 5 days from Sentinel-2 acquisition.
-      type: Directory[]
+      type: Directory
       inputBinding:
         position: 2
         prefix: --s3_input
@@ -90,7 +93,7 @@ $graph:
     path_to_credentials:
       label: Path to CDSAPI credentials stored in JSON file
       doc: Credentials to CDSAPI needed to download ERA5 data.
-      type: String
+      type: string
       inputBinding:
         position: 3
         prefix: --path_to_credentials
