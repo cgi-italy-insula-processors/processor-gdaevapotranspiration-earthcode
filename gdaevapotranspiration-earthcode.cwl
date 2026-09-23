@@ -19,6 +19,10 @@ cwlVersion: v1.2
 $graph:
 - class: Workflow
   id: gdaevapotranspiration-earthcode-test
+  # REQUIRED whenever the step below uses `scatter`: the platform detects fan-out
+  # by this requirement alone, never by the `scatter` key.
+  requirements:
+  - class: ScatterFeatureRequirement
   label: GDAEvapotranspiration_EarthCode_test
   doc: Estimates Daily Evapotranspiration from Sentinel-2 and Sentinel-3 SLSTR LST morning acquisition(s) based on the Two-Source Energy Balance Algorithm (TSEB) and machine learning sharpened Land Surface Temperature, utilizing Sen-ET project as baseline.
   inputs:
@@ -66,7 +70,7 @@ $graph:
   id: main
   requirements:
     DockerRequirement:
-      dockerPull: __IMAGE__
+      dockerPull: cgi-italy-insula-processors-processor-gdaevapotranspiration-earthcode:756aca35
     # Runtime network egress is OFF by default. Set to true ONLY if your processor
     # must reach the network while it runs (most batch EO processors do not).
     NetworkAccess:
