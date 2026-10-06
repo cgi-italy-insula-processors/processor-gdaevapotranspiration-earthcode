@@ -70,7 +70,7 @@ $graph:
   id: main
   requirements:
     DockerRequirement:
-      dockerPull: cgi-italy-insula-processors-processor-gdaevapotranspiration-earthcode:756aca35
+      dockerPull: __IMAGE__
     # Runtime network egress is OFF by default. Set to true ONLY if your processor
     # must reach the network while it runs (most batch EO processors do not).
     NetworkAccess:
