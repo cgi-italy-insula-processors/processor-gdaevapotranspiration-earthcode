@@ -19,10 +19,6 @@ cwlVersion: v1.2
 $graph:
 - class: Workflow
   id: gdaevapotranspiration-earthcode-test-v2
-  # REQUIRED whenever the step below uses `scatter`: the platform detects fan-out
-  # by this requirement alone, never by the `scatter` key.
-  requirements:
-  - class: ScatterFeatureRequirement
   label: GDAEvapotranspiration_EarthCode_test-v2
   doc: Estimates Daily Evapotranspiration from Sentinel-2 and Sentinel-3 SLSTR LST morning acquisition(s) based on the Two-Source Energy Balance Algorithm (TSEB) and machine learning sharpened Land Surface Temperature, utilizing Sen-ET project as baseline.
   inputs:
@@ -33,29 +29,27 @@ $graph:
     s3_input:
       label: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am)
       doc: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am) covering the same area and having an acquisition date within +- 5 days from Sentinel-2 acquisition.
-      type: Directory
+      type: Directory[]
     path_to_credentials:
       label: Path to CDSAPI credentials stored in JSON file
       doc: Credentials to CDSAPI needed to download ERA5 data.
       type: string
   outputs:
     output_daily_et:
-      type: Directory[]
+      type: Directory
       outputSource: process/output_daily_et
     output_lst:
-      type: Directory[]
+      type: Directory
       outputSource: process/output_lst
     output_s2_quality:
-      type: Directory[]
+      type: Directory
       outputSource: process/output_s2_quality
     output_s3_quality:
-      type: Directory[]
+      type: Directory
       outputSource: process/output_s3_quality
   steps:
     process:
       run: '#main'
-      scatter: s3_input
-      scatterMethod: dotproduct
       in:
         s2_input: s2_input
         s3_input: s3_input
@@ -89,7 +83,7 @@ $graph:
     s3_input:
       label: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am)
       doc: Sentinel-3 SLSTR LST morning acquisition(s) (5-12am) covering the same area and having an acquisition date within +- 5 days from Sentinel-2 acquisition.
-      type: Directory
+      type: Directory[]
       inputBinding:
         position: 2
         prefix: --s3_input
